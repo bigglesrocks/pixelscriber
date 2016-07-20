@@ -1,0 +1,754 @@
+* { box-sizing: border-box; }
+
+$base: #444;
+$danger: #e74c3c;
+$info: #3498db;
+$warning: #FDB10E;
+$success: #0F9E4C;
+$inverse: #fff;
+$radius: 4px;
+$primary: #931638;
+$secondary: #1381B3;
+$base-font-size: 16px;
+
+//
+// Button Mixins
+// --------------------------------------------------
+
+$default-btn-style: solid; // solid or hollow
+$default-btn-color       : $primary;
+
+$default-btn-text-size        : $base-font-size;
+$default-btn-text-weight      : normal;
+$default-btn-line-height      : 1.2em;
+$default-btn-text-color       : #fff;
+$default-btn-text-color-active: #fff;
+
+$default-btn-padding: 0.75em 1.3em 0.775em;
+$default-btn-radius : $radius;
+
+$default-btn-border-width: 1px;
+$default-btn-border-style: solid;
+
+$default-btn-icon      : false;
+$default-btn-icon-show : true;
+$default-btn-text-show : true;
+
+// Solid Button
+// -------------------------------------------------
+
+
+@mixin btn-style (
+
+  $btn-style: $default-btn-style, // solid or hollow
+
+  $btn-color        : $default-btn-color,
+  $btn-color-hover  : lighten($btn-color, 20%),
+  $btn-color-active : darken($btn-color, 21%),  
+
+  $btn-text-size         : $default-btn-text-size,
+  $btn-text-weight       : $default-btn-text-weight,
+  $btn-line-height       : $default-btn-line-height,
+  $btn-text-color        : $default-btn-text-color ,
+  $btn-text-color-hover  : color-contrast($btn-color, $base, $inverse),
+  $btn-text-color-active : $default-btn-text-color-active,
+
+  $btn-padding: $default-btn-padding,
+  $btn-radius : $default-btn-radius,
+  
+  $btn-border-color       : $btn-color,
+  $btn-border-color-hover : $btn-color-hover,
+  $btn-border-width       : $default-btn-border-width,
+  $btn-border-style       : $default-btn-border-style,
+
+  $btn-icon             : $default-btn-icon, // false or character code
+  $btn-icon-color       : $btn-text-color,
+  $btn-icon-hover-color : $btn-text-color-hover,
+  $btn-icon-show        : $default-btn-icon-show, //true or hover
+  $btn-text-show        : $default-btn-text-show //true or false
+  
+)
+
+{
+  border-radius: $btn-radius;
+  box-shadow: none;
+  transition: 0.25s;
+  display: inline-block;
+  box-sizing: border-box;
+  font-size: $btn-text-size;
+  font-weight: $btn-text-weight;
+  padding: $btn-padding;
+  line-height: $btn-line-height;
+  text-decoration: none;
+  text-shadow: none;
+  text-align: center;
+  margin: 0;
+  vertical-align: middle;
+  cursor: pointer;
+  text-decoration: none;
+
+  // Alternate states
+  // --------------------------------------------------
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    outline: none;
+    transition: 0.25s;
+  }
+
+  // Active State
+  &:active,
+  &.active {
+    box-shadow: none;
+  }
+
+  // Disabled state
+  &.disabled,
+  &[disabled] {
+    box-shadow: none;
+    opacity: 0.7;
+    cursor: default;
+  }
+
+  //Solid Button
+  @if $btn-style == solid {
+
+    background: $btn-color;
+    color: $btn-text-color;
+    border: $btn-border-width $btn-border-style $btn-border-color;
+
+    &:hover,
+    &:focus {
+      background-color: $btn-color-hover;
+      border-color: $btn-border-color-hover;
+      color: $btn-text-color-hover;
+    }
+
+    // Active State
+    &:active,
+    &.active {
+      background-color: $btn-color-active;
+      color: $btn-text-color-active;
+      border-color: $btn-color-active;
+    }
+
+    // Disabled state
+    &.disabled,
+    &[disabled] {
+      background-color: lighten($btn-color, 10%);
+      color: mix($btn-text-color, black, 50%);
+    }
+
+  }
+
+  @if $btn-style == hollow {
+    border: $btn-border-width $btn-border-style $btn-border-color;
+    background: transparent;
+    color: $btn-text-color;
+ 
+    // Alternate states
+    // --------------------------------------------------
+    &:hover,
+    &:focus {
+      background-color: $btn-color;
+      border-color: $btn-color;
+      color: $btn-text-color-hover;
+    }
+
+    // Active State
+    &:active,
+    &.active {
+      background-color: $btn-color-active;
+      color: $btn-text-color-active;
+      border-color: $btn-color-active;
+    }
+
+    // Disabled state
+    &.disabled,
+    &[disabled] {
+      background-color: transparent;
+      color: mix($btn-text-color, black, 50%);
+    }
+  }
+
+  @if $btn-icon != false {
+
+    /* &:after {
+      @include icon-defaults;
+      content: $btn-icon;
+      margin-left: .3em;
+      pointer-events: none;
+      text-indent: 0;
+      vertical-align: middle;
+    } */
+
+    @if $btn-text-show == false {
+      width: $btn-text-size;
+      text-indent: -999px;
+      border-radius: $btn-text-size * 2;
+      @include inline-block;
+      position: relative;
+      overflow: hidden;
+      &:after {
+        position: absolute;
+        left: $btn-text-size * 0.5;
+      }
+    }
+
+    @if $btn-icon-show == hover {
+      &:after {
+            transition: all .25s ease-in-out;
+            opacity: 0;
+            left: -0.75em;
+            position: relative;
+            width: 0;
+            display: inline-block;
+          }
+
+      &:hover {
+        padding-right: 2em;
+
+        &:after {
+          left: 0;
+          opacity: 1;
+        }
+      }
+    }
+
+
+  }
+
+}
+
+// Add Loading icon animation to a button
+// -------------------------------------------------
+
+@mixin spinner-button( $color: $inverse) {
+  @include spinner(
+      $size: 1em,
+      $color: $color
+    );
+  &:after {
+    margin-left: 0.5em;
+  }
+  &:hover { 
+    padding-right: 0.5em;
+    &:after { padding-left: 0; } 
+  }
+}
+
+@mixin btn(
+ $btn-style: $default-btn-style, // solid or hollow
+
+ $btn-color        : $default-btn-color,
+ $btn-color-hover  : lighten($btn-color, 20%),
+ $btn-color-active : darken($btn-color, 20%),  
+
+ $btn-text-size         : $default-btn-text-size,
+ $btn-text-weight       : $default-btn-text-weight,
+ $btn-line-height       : $default-btn-line-height,
+ $btn-text-color        : $default-btn-text-color ,
+ $btn-text-color-hover  : color-contrast($btn-color, $base, $inverse),
+ $btn-text-color-active : $default-btn-text-color-active,
+
+ $btn-padding: $default-btn-padding,
+ $btn-radius : $default-btn-radius,
+ 
+ $btn-border-color       : $btn-color,
+ $btn-border-color-hover : $btn-color-hover,
+ $btn-border-width       : $default-btn-border-width,
+ $btn-border-style       : $default-btn-border-style,
+
+ $btn-icon             : $default-btn-icon, // false or character code
+ $btn-icon-color       : $btn-text-color,
+ $btn-icon-hover-color : $btn-text-color-hover,
+ $btn-icon-show        : $default-btn-icon-show, //true or hover
+ $btn-text-show        : $default-btn-text-show //true or false
+
+) {
+
+  @include btn-style(
+    $btn-style: $btn-style, // solid or hollow
+
+    $btn-color        : $btn-color,
+    $btn-color-hover  : $btn-color-hover,
+    $btn-color-active : $btn-color-active,  
+
+    $btn-text-size         : $btn-text-size,
+    $btn-text-weight       : $btn-text-weight,
+    $btn-line-height       : $btn-line-height,
+    $btn-text-color        : $btn-text-color ,
+    $btn-text-color-hover  : $btn-text-color-hover,
+    $btn-text-color-active : $btn-text-color-active,
+
+    $btn-padding: $btn-padding,
+    $btn-radius : $btn-radius,
+    
+    $btn-border-color       : $btn-border-color,
+    $btn-border-color-hover : $btn-border-color-hover,
+    $btn-border-width       : $btn-border-width,
+    $btn-border-style       : $btn-border-style,
+
+    $btn-icon             : $btn-icon, // false or character code
+    $btn-icon-color       : $btn-icon-color,
+    $btn-icon-hover-color : $btn-icon-hover-color,
+    $btn-icon-show        : $btn-icon-show, //true or hover
+    $btn-text-show        : $btn-text-show //true or false
+  );
+
+}
+
+@mixin btn-solid(
+
+ $btn-color        : $default-btn-color,
+ $btn-color-hover  : lighten($btn-color, 20%),
+ $btn-color-active : darken($btn-color, 20%),  
+
+ $btn-text-size         : $default-btn-text-size,
+ $btn-text-weight       : $default-btn-text-weight,
+ $btn-line-height       : $default-btn-line-height,
+ $btn-text-color        : $default-btn-text-color ,
+ $btn-text-color-hover  : color-contrast($btn-color, $base, $inverse),
+ $btn-text-color-active : $default-btn-text-color-active,
+
+ $btn-padding: $default-btn-padding,
+ $btn-radius : $default-btn-radius,
+ 
+ $btn-border-color       : $btn-color,
+ $btn-border-color-hover : $btn-color-hover,
+ $btn-border-width       : $default-btn-border-width,
+ $btn-border-style       : $default-btn-border-style,
+
+ $btn-icon             : $default-btn-icon, // false or character code
+ $btn-icon-color       : $btn-text-color,
+ $btn-icon-hover-color : $btn-text-color-hover,
+ $btn-icon-show        : $default-btn-icon-show, //true or hover
+ $btn-text-show        : $default-btn-text-show //true or false
+) {
+
+  @include btn-style(
+    $btn-style: solid, // solid or hollow
+
+    $btn-color        : $btn-color,
+    $btn-color-hover  : $btn-color-hover,
+    $btn-color-active : $btn-color-active,  
+
+    $btn-text-size         : $btn-text-size,
+    $btn-text-weight       : $btn-text-weight,
+    $btn-line-height       : $btn-line-height,
+    $btn-text-color        : $btn-text-color ,
+    $btn-text-color-hover  : $btn-text-color-hover,
+    $btn-text-color-active : $btn-text-color-active,
+
+    $btn-padding: $btn-padding,
+    $btn-radius : $btn-radius,
+    
+    $btn-border-color       : $btn-border-color,
+    $btn-border-color-hover : $btn-border-color-hover,
+    $btn-border-width       : $btn-border-width,
+    $btn-border-style       : $btn-border-style,
+
+    $btn-icon             : $btn-icon, // false or character code
+    $btn-icon-color       : $btn-icon-color,
+    $btn-icon-hover-color : $btn-icon-hover-color,
+    $btn-icon-show        : $btn-icon-show, //true or hover
+    $btn-text-show        : $btn-text-show //true or false
+  );
+
+}
+
+@mixin btn-hollow(
+  $btn-color        : $default-btn-color,
+  $btn-color-active : darken($btn-color, 20%),  
+
+  $btn-text-size         : $default-btn-text-size,
+  $btn-text-weight       : $default-btn-text-weight,
+  $btn-line-height       : $default-btn-line-height,
+
+  $btn-padding: $default-btn-padding,
+  $btn-radius : $default-btn-radius,
+  
+  $btn-icon             : $default-btn-icon, // false or character code
+  $btn-icon-show        : $default-btn-icon-show, //always or hover
+  $btn-text-show        : $default-btn-text-show //true or false
+) {
+
+  @include btn-style(
+    $btn-style: hollow, // solid or hollow
+
+    $btn-color        : $btn-color,
+    $btn-color-active : $btn-color-active, 
+
+    $btn-text-size         : $btn-text-size,
+    $btn-text-weight       : $btn-text-weight,
+    $btn-line-height       : $btn-line-height,
+    $btn-text-color        : $btn-color ,
+
+    $btn-padding: $btn-padding,
+    $btn-radius : $btn-radius,
+    
+    $btn-border-width       : 1px,
+    $btn-border-style       : solid,
+
+    $btn-icon             : $btn-icon, // false or character code
+    $btn-icon-color       : $btn-color,
+    $btn-icon-show        : $btn-icon-show, //true or hover
+    $btn-text-show        : $btn-text-show //true or false
+  );
+
+}
+
+
+.btn-primary {
+  @include btn-solid (
+    $btn-color: $primary,
+    $btn-icon: "\E00C",
+    $btn-icon-show: hover
+  );
+}
+
+//--- Secondary Button --//
+
+.btn-secondary {
+ @include btn-solid (
+    $btn-color: $secondary
+  );
+}
+
+.dropzone {
+  border: 2px dashed $info;
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  padding: 5em;
+  vertical-align: middle;
+  height: 100%;
+  .dz-message {
+    /* font-size: 1.6em; */
+    color: lighten($base, 15%);
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+    position: absolute;
+    width: 100%;
+    white-space: nowrap;
+  }
+   #the-image { display: none; } 
+   button {
+      position: absolute;
+      top: 60%;
+      left: 50%;
+      transform: translate(-50%, -40%);
+      pointer-events: none;
+    }
+}
+
+.result {
+  padding: 10px;
+  display: block;
+  text-align: center;
+  position: relative;
+  &.uploaded {
+    width: 100%;
+    max-width: none;
+    .wrapper {
+      max-width: none;
+    }
+  }
+  
+  .wrapper {
+    border: 1px solid rgba(0,0,0,0.3);
+    display: inline-block;
+    min-width: 600px;
+    max-width: 600px;
+    width: auto;
+    margin: 0 auto 0;
+    transition: all 0.35s ease-in-out;
+    transform-origin: center center;
+    font-family: "Open Sans";
+    overflow: visible;
+    position: relative;
+    background-color: rgba(0,0,0,0.05);
+    .image {
+      width: 100%;
+      height: 100%;
+      padding: 1em;
+      position: relative;
+    }
+    
+    .main-copy {
+      display: inline-block;
+      cursor: grab;
+      position: absolute;
+      top: 0;
+      left: 0;
+      border: 1px solid transparent;
+      &:hover {
+        border: 1px solid rgba(0,0,0,0.8);
+      }
+    }
+    
+    .delineator {
+      width: 100px;
+      height: 5px;
+      display: block;
+      margin-bottom: 0.3rem;
+      margin-left: 0.3rem;
+    }
+    
+    .editable-field {
+      display: inline-block;
+      width: auto;
+      background-color: transparent;
+      padding: 2px;
+      font-family: "Open Sans";
+      cursor: text;
+      border: 2px solid transparent;
+      
+      &:hover {
+        border: 2px dashed rgba(155, 155, 255, 0.6);
+      }
+      
+      &.heading {
+        font-weight: 300;
+        color: $inverse;
+        font-size: 1.6em;
+        margin-bottom: 0.3rem;
+      }
+      &.subhead {
+        color: black;
+        font-size: 0.9em;
+      }
+      &.caption {
+        font-size: 0.5em;
+      }
+    }
+  }
+}
+
+.drop-grid {
+  width: 50%;
+  position: absolute;
+  border: 1px dotted $info;
+  &.left { left: 0; }
+  &.right { right: 0; }
+}
+
+.controls {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: $info;
+  width: 100%;
+  height: 3.2em;
+  color: $inverse;
+  padding: 0.5em 1em;
+  font-size: 1em;
+  
+  button, a.btn {
+    @include btn-hollow(
+      $btn-padding: 0.5em,
+      $btn-color: $inverse,
+      $btn-text-size: 0.9em
+    );
+    &:hover {
+      color: $info;
+    }
+    &[disabled] {
+      color: rgba(255,255,255,0.6);
+      border-color: rgba(255,255,255,0.6);
+    }
+    &.active {
+      backgorund-color: rgba(0,0,0,0.4);
+      color: rgba(255,255,255,0.7);
+      &:after {
+        content: "\2713";
+      }
+      &:hover {
+        background-color: $inverse;
+        color: $info;
+        &:after {
+          content: "\2A2F";
+        }
+      }
+    }
+  }
+  
+  .input-group, .form-group, input, label {
+    display: inline-block;
+  }
+  
+  .form-group {
+    margin-right: 2em;
+  }
+  input {
+    height: 2em;
+    border-radius: 4px;
+    outline: none;
+    border: none;
+    box-shadow: none;
+    border: 1px soid rgba(0,0,0,0.8);
+    color: $base;
+  }
+  
+  .size {
+    input {
+      width: 4em;
+      padding: 0 0.5em;
+    }
+  }
+  
+  .ad-color {
+    * { vertical-align: middle; }
+    input {
+      padding: 0;
+      outline: none;
+      border: none;
+      border: 1px solid rgba(255,255,255,0.4);
+      /* margin-top: 0.1em; */
+    }
+    label { 
+      color: rgba(255,255,255,0.4); }
+  }
+}
+
+.img-table {
+  border-collpase: collapse;
+  border-spacing: 0;
+  table-layout: fixed;
+  tr {
+    height: 1px;
+    overflow: hidden;
+    width: 100%;
+    display: block;
+    td {
+      line-height: 0;
+      text-align: center;
+      padding: 0;
+      display: inline-block;
+      vertical-align: top;
+      
+      span { 
+        display: block;
+        width: 1px;
+        height: 1px;
+      }
+    }
+  }
+}
+
+.loader {
+  display: none;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  .loading & { display: block; }
+}
+
+.cssload-spin-box {
+	margin: auto;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	width: 15px;
+	height: 15px;
+	border-radius: 100%;
+	box-shadow: 15px 15px rgb(79,77,73), -15px 15px rgb(223,223,223), -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223);
+		-o-box-shadow: 15px 15px rgb(79,77,73), -15px 15px rgb(223,223,223), -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223);
+		-ms-box-shadow: 15px 15px rgb(79,77,73), -15px 15px rgb(223,223,223), -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223);
+		-webkit-box-shadow: 15px 15px rgb(79,77,73), -15px 15px rgb(223,223,223), -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223);
+		-moz-box-shadow: 15px 15px rgb(79,77,73), -15px 15px rgb(223,223,223), -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223);
+	animation: cssload-spin ease infinite 4.6s;
+		-o-animation: cssload-spin ease infinite 4.6s;
+		-ms-animation: cssload-spin ease infinite 4.6s;
+		-webkit-animation: cssload-spin ease infinite 4.6s;
+		-moz-animation: cssload-spin ease infinite 4.6s;
+}
+
+
+@keyframes cssload-spin {
+	0%,
+	100% {
+		box-shadow: 15px 15px rgb(79,77,73), -15px 15px rgb(223,223,223), -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223);
+	}
+	25% {
+		box-shadow: -15px 15px rgb(223,223,223), -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223), 15px 15px rgb(79,77,73);
+	}
+	50% {
+		box-shadow: -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223), 15px 15px rgb(79,77,73), -15px 15px rgb(223,223,223);
+	}
+	75% {
+		box-shadow: 15px -15px #dfdfdf, 15px 15px #4f4d49, -15px 15px #dfdfdf, -15px -15px #4f4d49;
+	}
+}
+
+@-o-keyframes cssload-spin {
+	0%,
+	100% {
+		box-shadow: 15px 15px rgb(79,77,73), -15px 15px rgb(223,223,223), -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223);
+	}
+	25% {
+		box-shadow: -15px 15px rgb(223,223,223), -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223), 15px 15px rgb(79,77,73);
+	}
+	50% {
+		box-shadow: -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223), 15px 15px rgb(79,77,73), -15px 15px rgb(223,223,223);
+	}
+	75% {
+		box-shadow: 15px -15px #dfdfdf, 15px 15px #4f4d49, -15px 15px #dfdfdf, -15px -15px #4f4d49;
+	}
+}
+
+@-ms-keyframes cssload-spin {
+	0%,
+	100% {
+		box-shadow: 15px 15px rgb(79,77,73), -15px 15px rgb(223,223,223), -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223);
+	}
+	25% {
+		box-shadow: -15px 15px rgb(223,223,223), -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223), 15px 15px rgb(79,77,73);
+	}
+	50% {
+		box-shadow: -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223), 15px 15px rgb(79,77,73), -15px 15px rgb(223,223,223);
+	}
+	75% {
+		box-shadow: 15px -15px #dfdfdf, 15px 15px #4f4d49, -15px 15px #dfdfdf, -15px -15px #4f4d49;
+	}
+}
+
+@-webkit-keyframes cssload-spin {
+	0%,
+	100% {
+		box-shadow: 15px 15px rgb(79,77,73), -15px 15px rgb(223,223,223), -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223);
+	}
+	25% {
+		box-shadow: -15px 15px rgb(223,223,223), -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223), 15px 15px rgb(79,77,73);
+	}
+	50% {
+		box-shadow: -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223), 15px 15px rgb(79,77,73), -15px 15px rgb(223,223,223);
+	}
+	75% {
+		box-shadow: 15px -15px #dfdfdf, 15px 15px #4f4d49, -15px 15px #dfdfdf, -15px -15px #4f4d49;
+	}
+}
+
+@-moz-keyframes cssload-spin {
+	0%,
+	100% {
+		box-shadow: 15px 15px rgb(79,77,73), -15px 15px rgb(223,223,223), -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223);
+	}
+	25% {
+		box-shadow: -15px 15px rgb(223,223,223), -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223), 15px 15px rgb(79,77,73);
+	}
+	50% {
+		box-shadow: -15px -15px rgb(79,77,73), 15px -15px rgb(223,223,223), 15px 15px rgb(79,77,73), -15px 15px rgb(223,223,223);
+	}
+	75% {
+		box-shadow: 15px -15px #dfdfdf, 15px 15px #4f4d49, -15px 15px #dfdfdf, -15px -15px #4f4d49;
+	}
+}
+		
+
+
